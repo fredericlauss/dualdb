@@ -1,28 +1,30 @@
 version: '3'
 
 services:
-  # Add more containers below (nginx, postgres, etc.)
-  my-api:
-      container_name: my-api
-      image: ghcr.io/fredericlauss/fullnextapp-api:main
-
-      # Set envrionment variables based on the .env file
-      env_file:
-        - .env
-      restart: always
-      ports:
-        - 5000:5000
-      depends_on:
-        - mongo
-
-  mongo:
-    container_name: mongo
-    image: mongo
+  dualdb-front:
+    container_name: dualdb-front
+    build:
+      context: ./dualdb-front
+      dockerfile: Dockerfile
+      args:
+        ENV_VARIABLE: ${ENV_VARIABLE}
+        NEXT_PUBLIC_ENV_VARIABLE: ${NEXT_PUBLIC_ENV_VARIABLE}
+    env_file:
+      - dualdb-front/.env
     restart: always
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=userAdmin
-      - MONGO_INITDB_ROOT_PASSWORD=userPassword
-    volumes:
-      - ./data:/data/db
-    command: mongod --quiet --logpath /dev/null 
+    ports:
+      - 3000:3000
+
+  # my-api:
+  #     container_name: my-api
+  #     image: ghcr.io/fredericlauss/fullnextapp-api:main
+
+  #     # Set envrionment variables based on the .env file
+  #     env_file:
+  #       - .env
+  #     restart: always
+  #     ports:
+  #       - 5000:5000
+  #     depends_on:
+  #       - mongo
     
