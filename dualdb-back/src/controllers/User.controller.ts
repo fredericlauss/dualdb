@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { User } from '../models/User.model';
+import { UserAccount } from '../models/User.model';
 import { orm } from "../../index";
 
 export async function register(req: Request, res: Response) {
@@ -12,7 +12,7 @@ export async function register(req: Request, res: Response) {
   const em = mikro.em.fork();
 
   try {
-    const userRepository = em.getRepository(User);
+    const userRepository = em.getRepository(UserAccount);
     const user = userRepository.create({ username, password: hashedPassword });
     await em.persistAndFlush(user); 
     res.status(201).json({ message: 'Utilisateur inscrit avec succès' });
@@ -29,7 +29,7 @@ export async function login(req: Request, res: Response) {
     const em = mikro.em.fork();
   
     try {
-      const userRepository = em.getRepository(User);
+      const userRepository = em.getRepository(UserAccount);
       const user = await userRepository.findOne({ username });
   
       if (!user) {
