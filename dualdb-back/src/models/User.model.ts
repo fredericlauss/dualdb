@@ -7,7 +7,7 @@ export class User {
   id!: number;
 
   @Property()
-  user!: string;
+  username!: string;
 
   @Property()
   password!: string;
