@@ -34,11 +34,11 @@
           "mappedType": "string"
         }
       },
-      "name": "user",
+      "name": "user_account",
       "schema": "public",
       "indexes": [
         {
-          "keyName": "user_pkey",
+          "keyName": "user_account_pkey",
           "columnNames": [
             "id"
           ],
@@ -81,8 +81,8 @@
           "nullable": false,
           "mappedType": "string"
         },
-        "user_id": {
-          "name": "user_id",
+        "user_account_id": {
+          "name": "user_account_id",
           "type": "int",
           "unsigned": false,
           "autoincrement": false,
@@ -107,16 +107,16 @@
       ],
       "checks": [],
       "foreignKeys": {
-        "note_user_id_foreign": {
-          "constraintName": "note_user_id_foreign",
+        "note_user_account_id_foreign": {
+          "constraintName": "note_user_account_id_foreign",
           "columnNames": [
-            "user_id"
+            "user_account_id"
           ],
           "localTableName": "public.note",
           "referencedColumnNames": [
             "id"
           ],
-          "referencedTableName": "public.user",
+          "referencedTableName": "public.user_account",
           "updateRule": "cascade"
         }
       },

@@ -1,5 +1,5 @@
 import { MikroORM } from '@mikro-orm/postgresql';
-import { User } from '../models/User.model';
+import { UserAccount } from '../models/User.model';
 import { Note } from '../models/Note.model';
 
 async function databaseConnection() {
@@ -7,7 +7,7 @@ async function databaseConnection() {
         dbName: process.env.DB_NAME,
         user: process.env.DB_USER,
         password: process.env.DB_PASS,
-        entities: [User, Note],
+        entities: [UserAccount, Note],
         port: parseInt(process.env.DB_PORT),
         debug: true,
     });
