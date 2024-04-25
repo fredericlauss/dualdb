@@ -2,7 +2,7 @@ import { Entity, PrimaryKey, Property, OneToMany, Collection } from '@mikro-orm/
 import { Note } from './Note.model';
 
 @Entity()
-export class User {
+export class UserAccount {
   @PrimaryKey({autoincrement: true})
   id!: number;
 
@@ -12,6 +12,6 @@ export class User {
   @Property()
   password!: string;
 
-  @OneToMany(() => Note, note => note.user)
+  @OneToMany(() => Note, note => note.UserAccount)
   notes = new Collection<Note>(this);
 }

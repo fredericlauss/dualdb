@@ -3,10 +3,13 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import databaseConnection from './src/config/connectdatabase'
 import UserRoute from "./src/routes/User.Routes";
+import cookieParser from 'cookie-parser';
 
 const initializeServer = async () => {
 
     const app = express();
+
+    app.use(cookieParser());
 
     app.use(bodyParser.json())
     dotenv.config();

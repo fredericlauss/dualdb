@@ -1,5 +1,5 @@
 import { Entity, PrimaryKey, Property, ManyToOne, Collection } from '@mikro-orm/postgresql';
-import { User } from './User.model';
+import { UserAccount } from './User.model';
 
 @Entity()
 export class Note {
@@ -12,6 +12,6 @@ export class Note {
   @Property()
   content!: string;
 
-  @ManyToOne(() => User)
-  user!: User;
+  @ManyToOne(() => UserAccount)
+  UserAccount!: UserAccount;
 }
