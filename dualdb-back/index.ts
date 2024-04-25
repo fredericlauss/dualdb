@@ -4,12 +4,18 @@ import dotenv from 'dotenv';
 import databaseConnection from './src/config/connectdatabase'
 import UserRoute from "./src/routes/User.Routes";
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
 const initializeServer = async () => {
 
     const app = express();
 
     app.use(cookieParser());
+    app.use(cors({
+        origin: [
+            'http://localhost:3000'
+        ]
+    }));
 
     app.use(bodyParser.json())
     dotenv.config();
