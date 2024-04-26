@@ -1,3 +1,5 @@
+'use client';
+
 import { Request } from '@/services/api/helpers/request';
 import { API } from '@shared/api';
 import { useState, useEffect } from 'react';
