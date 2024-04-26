@@ -5,9 +5,15 @@ import { PageLayout } from '@/components';
 import { Form, FormHandler } from '@/modules/Form';
 import { Requests } from '@shared/api';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { routes } from '@/services/api/routes';
 
 const LoginPage = () => {
 
+    const router = useRouter();
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
     const [login, setLogin] = useState(defaultLogin);
 
     const handleChanges: FormHandler<ValueOf<typeof login>> = ({ name, value }) => {
@@ -15,6 +21,19 @@ const LoginPage = () => {
             ...login,
             [name]: value
         });
+    }
+
+    const handleSubmit = async () => {
+        setIsLoading(true);
+        setError(null);
+        const success = await routes.users.login(login);
+        if (success) {
+            router.push('/');
+            return setIsLoading(false);
+        }
+
+        setError("Une erreur est survenue.");
+        setIsLoading(false);
     }
 
     return (
@@ -33,10 +52,15 @@ const LoginPage = () => {
                     onChange={handleChanges}
                     placeholder='Password'
                 />
-                <button className='animated filled'>
+                {!!error && <p className='error'>{error}</p>}
+                <button 
+                    className='animated filled'
+                    onClick={handleSubmit}
+                    disabled={isLoading}
+                >
                     Valider
                 </button>
-                <p>Pas encore inscrit ? <Link href='/login'>S'incrire</Link>.</p>
+                <p>Pas encore inscrit ? <Link href='/register'>S'incrire</Link>.</p>
             </div>
         </PageLayout>
     );

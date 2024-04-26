@@ -19,6 +19,12 @@
 
                 margin-bottom: $size-16;
             }
+
+            .error {
+                padding-left: $size-8;
+
+                border-left: 2px solid $red-dark;
+            }
         }
     }
 }

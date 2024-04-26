@@ -6,8 +6,11 @@ import { Form, FormHandler } from '@/modules/Form';
 import { Requests } from '@shared/api';
 import Link from 'next/link';
 import { routes } from '@/services/api/routes';
+import { useRouter } from 'next/navigation'
 
 const RegisterPage = () => {
+
+    const router = useRouter();
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -24,7 +27,12 @@ const RegisterPage = () => {
         setIsLoading(true);
         setError(null);
         const success = await routes.users.register(form);
-        if (!success) setError("Une erreur est survenue.");
+        if (success) {
+            router.push('/login');
+            return setIsLoading(false);
+        }
+
+        setError("Une erreur est survenue.");
         setIsLoading(false);
     }
 
