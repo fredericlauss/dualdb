@@ -113,25 +113,29 @@ export async function deleteById(req: Request, res: Response) {
 }
 
 export async function updateNote(req: Request, res: Response) {
+  const id = req.params.id;
+  const { title, content } = req.body;
 
-    const id = req.params.id;
-    const { title, content } = req.body;
-    const mikro = await orm;
-    const em = mikro.em.fork();
-  
-    try {
-      const noteRepository = em.getRepository(Note);
-      
-      const note = await noteRepository.findOne({ id: parseInt(id) });
-  
-      if (!note) {
-        return res.status(404).json({ message: "Note non trouvée" });
-      }
-  
-      await em.removeAndFlush(note);
-      return res.status(200).json({ message: "Note supprimée avec succès" });
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: "Erreur lors de la suppression de la note" });
+  const mikro = await orm;
+  const em = mikro.em.fork();
+
+  try {
+    const noteRepository = em.getRepository(Note);
+
+    const note = await noteRepository.findOne({ id: parseInt(id) });
+
+    if (!note) {
+      return res.status(404).json({ message: "Note non trouvée" });
     }
+
+    note.title = title;
+    note.content = content;
+
+    await em.persistAndFlush(note);
+
+    return res.status(200).json({ message: "Note modifiée avec succès" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Erreur lors de la modification de la note" });
   }
+}
