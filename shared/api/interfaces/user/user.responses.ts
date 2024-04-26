@@ -9,3 +9,10 @@ export interface Login extends API.Responses {
     200: never;
     500: never;
 }
+
+export interface Current extends API.Responses {
+    200: {
+        username: string
+    };
+    500: never;
+}

@@ -26,7 +26,7 @@ const LoginPage = () => {
     const handleSubmit = async () => {
         setIsLoading(true);
         setError(null);
-        const success = await routes.users.register(login);
+        const success = await routes.users.login(login);
         if (success) {
             router.push('/');
             return setIsLoading(false);
