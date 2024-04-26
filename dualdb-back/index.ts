@@ -6,7 +6,24 @@ import UserRoute from "./src/routes/User.Routes";
 import NoteRoute from "./src/routes/Note.Routes";
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import connectDatabaseMongo from './src/config/connectMongoDB'
+import connectDatabaseMongo from './src/config/connectMongoDB';
+import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
+
+
+    
+const options = {
+    definition: {
+      openapi: '3.0.0',
+      info: {
+        title: 'Hello World',
+        version: '1.0.0',
+      },
+    },
+    apis: ['src/routes/Note.Routes.ts', 'src/routes/User.Routes.ts'],
+  };
+  
+  const swaggerDocs = swaggerJsdoc(options);
 
 
 const initializeServer = async () => {
@@ -33,6 +50,8 @@ const initializeServer = async () => {
     
     app.use('/users', UserRoute)
     app.use('/notes', NoteRoute)
+    app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs))
+
     
     app.listen(port, () => {
         console.log(`Serveur démarré sur le port ${port}`);
