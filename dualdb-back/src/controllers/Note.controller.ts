@@ -2,11 +2,32 @@ import { Request, Response } from 'express';
 import { Note } from '../models/Note.model';
 import { UserAccount } from '../models/User.model';
 import { orm } from "../../index";
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 
 export async function getNotes(req: Request, res: Response) {
   const mikro = await orm;
   const em = mikro.em.fork();
+
+  if (!req.cookies || !req.cookies.jwt) {
+    return res.status(401).json({ message: "Token non fourni" });
+  }
+
+  const token = req.cookies.jwt;
+  let userId: number;
+
+  try {
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET) as { userId: number };
+    userId = decodedToken.userId;
+    console.log(userId);
+    const noteRepository = em.getRepository(Note);
+
+    const notes = await noteRepository.find({ UserAccount : userId });
+    res.json(notes);
+  } catch (error) {
+    console.error(error);
+    return res.status(401).json({ message: "Token invalide" });
+  }
+
   try {
     const noteRepository = em.getRepository(Note);
     const notes = noteRepository.findAll();
@@ -97,3 +118,27 @@ export async function deleteById(req: Request, res: Response) {
     res.status(500).json({ message: "Erreur lors de la suppression de la note" });
   }
 }
+
+export async function updateNote(req: Request, res: Response) {
+
+    const id = req.params.id;
+    const { title, content } = req.body;
+    const mikro = await orm;
+    const em = mikro.em.fork();
+  
+    try {
+      const noteRepository = em.getRepository(Note);
+      
+      const note = await noteRepository.findOne({ id: parseInt(id) });
+  
+      if (!note) {
+        return res.status(404).json({ message: "Note non trouvée" });
+      }
+  
+      await em.removeAndFlush(note);
+      res.status(200).json({ message: "Note supprimée avec succès" });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Erreur lors de la suppression de la note" });
+    }
+  }
