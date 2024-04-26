@@ -48,7 +48,7 @@ export async function login(req: Request, res: Response) {
   
       const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);
   
-      res.cookie('jwt', token, { httpOnly: true, maxAge: 3600000, path: "/" });
+      res.cookie('jwt', token, { httpOnly: true, maxAge: 3600000 * 24, path: "/" });
   
       res.status(200).json({ message: 'Authentification réussie' });
     } catch (error) {
