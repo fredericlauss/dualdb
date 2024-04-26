@@ -20,7 +20,7 @@ export async function register(req: Request, res: Response) {
     const userRepository = em.getRepository(UserAccount);
     const user = userRepository.create({ username, password: hashedPassword });
     await em.persistAndFlush(user); 
-    res.status(201).json({ message: 'Utilisateur inscrit avec succès' });
+    return res.status(201).json({ message: 'Utilisateur inscrit avec succès' });
   } catch (error) {
     res.status(500).json({ message: 'Erreur lors de l\'inscription de l\'utilisateur' });
   }
@@ -50,7 +50,7 @@ export async function login(req: Request, res: Response) {
   
       res.cookie('jwt', token, { httpOnly: true, maxAge: 3600000 * 24, path: "/" });
   
-      res.status(200).json({ message: 'Authentification réussie' });
+      return res.status(200).json({ message: 'Authentification réussie' });
     } catch (error) {
       res.status(500).json({ message: 'Erreur lors de l\'authentification de l\'utilisateur' });
     }
@@ -73,7 +73,7 @@ export async function login(req: Request, res: Response) {
       
       const username = await userRepository.findOne({id: userId})
       
-      res.status(200).json({ username });
+      return res.status(200).json({ username });
     } catch (error) {
       res.status(500).json({ message: 'Erreur lors de l\'identification de l\'utilisateur' });
     }
