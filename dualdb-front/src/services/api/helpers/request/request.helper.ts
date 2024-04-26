@@ -8,6 +8,7 @@ export const Request = new RequestHelper({
     defaultOptions: {
         headers: {
             'Content-Type': 'application/json'
-        }
+        },
+        credentials: 'include'
     }
 });

@@ -22,7 +22,7 @@ export async function getNotes(req: Request, res: Response) {
     const noteRepository = em.getRepository(Note);
 
     const notes = await noteRepository.find({ UserAccount : userId });
-    res.json(notes);
+    return res.json(notes);
   } catch (error) {
     console.error(error);
     return res.status(401).json({ message: "Token invalide" });
