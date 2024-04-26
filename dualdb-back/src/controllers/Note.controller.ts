@@ -18,7 +18,6 @@ export async function getNotes(req: Request, res: Response) {
   try {
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET) as { userId: number };
     userId = decodedToken.userId;
-    console.log(userId);
     const noteRepository = em.getRepository(Note);
 
     const notes = await noteRepository.find({ UserAccount : userId });
@@ -47,7 +46,7 @@ export async function getNotebyId(req: Request, res: Response) {
     console.log(note)
     res.json(note);
   } catch (error) {
-    res.status(500).json({ message: "Erreur lors de la récupération note " });
+    res.status(500).json({ message: "Erreur lors de la récupération notes" });
   }
 }
 
@@ -56,6 +55,10 @@ export async function createNote(req: Request, res: Response) {
   
   if (!req.cookies || !req.cookies.jwt) {
     return res.status(401).json({ message: "Token non fourni" });
+  }
+
+  if (!title || !content) {
+    res.status(400).json({message: "Le champs titre et contenu sont obligatoire"})
   }
 
   const token = req.cookies.jwt;
@@ -73,7 +76,6 @@ export async function createNote(req: Request, res: Response) {
   const mikro = await orm;
   const em = mikro.em.fork();
   try {
-    const noteRepository = em.getRepository(Note);
     const userRepository = em.getRepository(UserAccount);
 
     const user = await userRepository.findOne({ id: userId });
