@@ -6,6 +6,8 @@ import UserRoute from "./src/routes/User.Routes";
 import NoteRoute from "./src/routes/Note.Routes";
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import connectDatabaseMongo from './src/config/connectMongoDB'
+
 
 const initializeServer = async () => {
 
@@ -23,6 +25,7 @@ const initializeServer = async () => {
     dotenv.config();
     
     const orm = await databaseConnection()
+    connectDatabaseMongo()
 
     const port = process.env.PORT || 3000;
     
